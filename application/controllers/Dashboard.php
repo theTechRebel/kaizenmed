@@ -25,8 +25,12 @@ class Dashboard extends CI_Controller {
 	 */
 	public function index()
 	{
-        $this->load->view('Require/header');
-		$this->load->view('Dashboard/dashboard');
-        $this->load->view('Require/footer');
+        if($this->session->userdata('logged_in') == FALSE) {
+            redirect('auth');
+        }else{
+            $this->load->view('Require/header');
+            $this->load->view('Dashboard/dashboard');
+            $this->load->view('Require/footer');
+        }
 	}
 }
