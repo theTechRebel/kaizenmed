@@ -1,4 +1,4 @@
-<h3>Login to Rapha Healthcare Systems e-Clinic</h3>
+<h3>Login to e-Clinic</h3>
 
 <?php
     echo form_open('auth');

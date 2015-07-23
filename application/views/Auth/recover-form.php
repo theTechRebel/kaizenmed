@@ -1,4 +1,4 @@
-<h3>Enter your Email Address below to recover your password.</h3>
+<h3>Enter your Username to recover your password.</h3>
 
 <?php
 echo form_open('auth/recover');
