@@ -2,6 +2,14 @@
 $(function(){
     // page is now ready, initialize the calendar...
     $('#calendar').fullCalendar({
-        // put your options and callbacks here
+        editable: true,
+
+        events: 'http://localhost/kaizen/KaizenMed/booking/read/web/',
+
+        header:{
+            left:   'prevYear,nextYear',
+            center: 'title,today',
+            right:  'prev,next,month,agendaWeek,agendaDay'
+        }
     });
 });
