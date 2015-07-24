@@ -9,18 +9,17 @@ class Auth extends CI_Controller {
 
     /* PRIVATE FUNCTIONS*/
 
-    /* 1. _startSession(usertype,detail[name surname etc],userlevel)
+    /* 1. _startSession(detail[name surname etc],userlevel[admin, nurse, reception etc])
      *   starts a users session on the system initiating that they have
      *    officially logged in.
      *
     */
 
-    private function _startSession($usertype,$details,$userlevel){
+    private function _startSession($details,$userlevel){
         $userdata = array(
             'logged_in' => TRUE,
             'details' => $details,
-            'userlevel' =>$userlevel,
-            'usertype' => $usertype
+            'userlevel' =>$userlevel
         );
 
         $this->session->set_userdata($userdata);
@@ -66,7 +65,7 @@ class Auth extends CI_Controller {
                 $this->load->view('Auth/login', $data);
                 $this->load->view('Require/footer');
             }else{
-                $this->_startSession($data['usertype'],$data['details'],$data['userlevel']);
+                $this->_startSession($data['details'],$data['userlevel']);
                 redirect('dashboard');
             }
 
