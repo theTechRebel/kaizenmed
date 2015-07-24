@@ -16,3 +16,38 @@
 
     </div>
 </div>
+
+<!-- This is the add booking modal -->
+<div id="add-booking" class="uk-modal">
+    <div class="uk-modal-dialog" align="center">
+        <a class="uk-modal-close uk-close"></a>
+        <div id="selected-time"></div>
+        <div id="selected-date"></div>
+        <div class="uk-grid">
+            <div class="uk-width-medium-1-2">
+                <div class="uk-panel uk-panel-hover">
+                    <h3 class="uk-panel-title"><i class="uk-icon-user"></i> Existing client.</h3>
+                    <?php require_once('select-client-form.php');?>
+                </div>
+            </div>
+            <div class="uk-width-medium-1-2">
+                <div class="uk-panel uk-panel-hover">
+                    <h3 class="uk-panel-title"><i class="uk-icon-user"></i> New client.</h3>
+                    <?php require_once('new-client-form.php');?>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+</div>
+
+<!-- This is the view booking modal -->
+<div id="view-booking" class="uk-modal">
+    <div class="uk-modal-dialog" align="center">
+        <a class="uk-modal-close uk-close"></a>
+        <div id="booking-title"></div>
+        <div id="booking-doctor"></div>
+        <div id="booking-treatment"></div>
+        <div id="booking-time"></div>
+    </div>
+</div>

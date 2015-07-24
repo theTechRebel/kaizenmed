@@ -60,7 +60,8 @@ class Booking extends CI_Controller {
                     4   => array(
                         'title' => 'Joyce Samuriwo',
                         'treatment' => 'Liver cyclerosis',
-                        'Doctor'    => 'C.Masiya',
+                        'doctor'    => 'C.Masiya',
+                        'time'  => '11:45 AM',
                         'start' => '2015-07-12T10:30:00',
                         'end'   => '2015-07-12T12:30:00'
                         ),
