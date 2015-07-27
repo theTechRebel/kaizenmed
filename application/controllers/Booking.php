@@ -31,12 +31,68 @@ class Booking extends CI_Controller {
         }
     }
 
+    public function create($source){
+
+        switch ($source){
+            case 'web':
+                $this->form_validation->set_rules('doctor', 'Doctor', 'required');
+                $this->form_validation->set_rules('details', 'Appointment Details', 'required');
+                $this->form_validation->set_rules('end', 'Appointment End time', 'required');
+
+                if($this->form_validation->run() == FALSE) {
+                    $mydb = $this->mydb->get_all_where('clients', array('clinicID'=>$this->session->clinicID), 1);
+                    $client = $mydb->row_array(0);
+
+                    $mydb = $this->mydb->get_all('doctors');
+
+                    $dateAndTime = $this->session->date;
+
+                    $data = array('client'=> $client['name'].' '.$client['surname'].' Clinic ID:'.$client['clinicID'],
+                        'date'  => $dateAndTime['date'],
+                        'time'  => $dateAndTime['time'],
+                        'doctors'=>$mydb);
+
+                    $this->load->view('Require/header');
+                    $this->load->view('Booking/create',$data);
+                    $this->load->view('Require/footer');
+                }else{
+                    $dateAndTime = $this->session->date;
+                    
+                    $data = array('date'        => $dateAndTime['date'],
+                                  'clinicID'    => $this->session->clinicID,
+                                  'client'      => $this->input->post('client'),
+                                  'doctor'      => $this->input->post('doctor'),
+                                  'details'     => $this->input->post('details'),
+                                  'start'       => $dateAndTime['time'],
+                                  'end'         => $this->input->post('end'));
+
+                    $this->mydb->insert('bookings',$data);
+                    redirect('dashboard');
+                }
+                break;
+
+            case 'app':
+
+                break;
+        }
+    }
+
     private function _readAPI($start,$end){
+
+        $like_condition = array('date'=>$start,'date'=>$end);
+        $mydb = $this->mydb->get_all_like('bookings',$like_condition);
+
+        $data = array();
+        $i = 0;
+        foreach($mydb->result_array() as $row){
+           $data[$i] = $row;
+        }
+
 
         //search database
         //get events begining with start date and ending with end date
         //return an object in event data format
-        
+        /*
         $data = array(
                     0   => array(
                         'title' => 'All Day Event',
@@ -50,12 +106,12 @@ class Booking extends CI_Controller {
                     2   => array(
                         'id'    => 999,
                         'title' => 'Repeating Event',
-                        'start' => '2015-07-09'
+                        'start' => 'Sat Jul 23 2015 11:00:00 '
                         ),
                     3   => array(
                         'id'    => 999,
                         'title' => 'Repeating Event',
-                        'start' => '2015-07-09'
+                        'start' => 'Sat Jul 25 2015 11:00:00 '
                         ),
                     4   => array(
                         'title' => 'Joyce Samuriwo',
@@ -79,7 +135,7 @@ class Booking extends CI_Controller {
                         'start' => '2015-06-28'
                         )
                     );
-
+                    */
         return $data;
     }
 }

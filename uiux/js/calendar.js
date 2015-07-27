@@ -13,13 +13,31 @@ $(function(){
         },
 
         dayClick: function(date, jsEvent, view){
+            //if a user clicks on a day change view to agendaWeek View
+            if(view.name == 'month'){
+                $('#calendar').fullCalendar('changeView','agendaWeek');
+                return;
+            }
 
             var modal = UIkit.modal("#add-booking");
 
             if ( modal.isActive() ) {
                 modal.hide();
             } else {
-                modal.find($('#selected-date').text(date));
+                //desired format
+                //2015-06-28 & 13:00:00
+                //var d = date.format("HH:mm:ss"); - 24 hour notation
+                //var d = date.format("YYYY-MM-DD"); - date dashed format
+                
+                var dateFormated = date.format("YYYY-MM-DD");
+                var timeFormated = date.format("HH:mm");
+
+                console.log(dateFormated);
+                console.log(timeFormated);
+                
+                modal.find($('#selected-date').text(dateFormated+' '+timeFormated));
+                modal.find($('#post-date').val(dateFormated));
+                modal.find($('#post-time').val(timeFormated));
                 modal.show();
             }
         },

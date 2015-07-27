@@ -1,21 +1,25 @@
 <?php
-echo form_open('auth','class="uk-form"');
-echo '<div class="uk-form-row">';
-echo form_label('Type in clients name', 'clientName');
-echo "<br/>";
-echo form_input('clientName','','class="uk-form-large"');
-echo form_error('clientName', '<div class="error">', '</div>');
-echo '</div>';
-echo "<br/>";
-echo '<div class="uk-form-row">';
-echo form_label('Type in clients surname', 'clientSurname');
-echo "<br/>";
-echo form_input('clientSurname','','class="uk-form-large"');
-echo form_error('clientSurname', '<div class="error">', '</div>');
-echo '</div>';
-echo "<br/>";
-echo '<div class="uk-form-row">';
-echo form_submit('submit', 'Book Client','class="uk-button"');
-echo '</div>';
+$data = array(
+	    	0 => array(
+	    					'type'  => 'hidden',
+					    	'name'  => 'date',
+					    	'id'    => 'post-date',
+					    	'value' => ''
+	    					),
+		    1 => array(
+	    					'type'  => 'hidden',
+					    	'name'  => 'time',
+					    	'id'    => 'post-time',
+					    	'value' => ''	    	
+		    	)
+);
+
+echo form_open('Dashboard/pass_booking_date/','class="uk-form"');
+echo form_input($data[0]);
+echo form_input($data[1]);
+echo form_submit('submit', 'Add Client','class="uk-button"');
 echo form_close('');
+
 ?>
+
+

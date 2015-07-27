@@ -21,7 +21,6 @@
 <div id="add-booking" class="uk-modal">
     <div class="uk-modal-dialog" align="center">
         <a class="uk-modal-close uk-close"></a>
-        <div id="selected-time"></div>
         <div id="selected-date"></div>
         <div class="uk-grid">
             <div class="uk-width-medium-1-2">

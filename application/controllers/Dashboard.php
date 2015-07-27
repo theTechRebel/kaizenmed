@@ -47,29 +47,50 @@ class Dashboard extends CI_Controller {
     public function clients()
     {
         //which table to work with
-        $this->grocery_crud->set_table('employees')
+        $this->grocery_crud->set_table('clients')
         //set subject of the list
-        ->set_subject('Employee')
+        ->set_subject('Client')
         //set the display theme
         ->set_theme('datatables')
         //which colunms to display in list
-        ->columns('lastName','firstName','email','jobTitle','officeCode')
+        ->columns('clinicID','name','surname','gender')
         //display DB colunms as what
-        ->display_as('lastName','Last Name')
-        ->display_as('firstName','First Name')
+        ->display_as('clinicID','e-Clinic ID')
+        ->display_as('name','First Name(s)')
+        ->display_as('surname','Surname')
+        ->display_as('gender','Gender')
+        ->display_as('idnumber','National ID Number')
+        ->display_as('notes','Additional Information')
         ->display_as('email','Email Address')
-        ->display_as('jobTitle','Job Title')
-        ->display_as('officeCode','Office City')
+        ->display_as('phone','Phone Number')
+        //->display_as('officeCode','Office City')
         //which fields to show in forms
-        //->fields('lastName','firstName','extension','email','jobTitle')
+        ->fields('clinicID','name','surname','gender','idnumber','email','phone','notes')
         //which fields are required to save data in the db
-        ->required_fields('firstName','lastName','email','jobTitle')
+        ->required_fields('name','surname','gender','phone')
         //which table to link to
-        ->set_relation('officeCode','offices','city')
+        //->set_relation('officeCode','offices','city')
+        //make the ClientID field invisible to the user
+        ->change_field_type('clinicID','invisible')
+        //before inserting theb data run this callback function
+        ->callback_before_insert(array($this,'_generateClinicID'))
+        //add callback after insertion
+        //->callback_after_insert(array($this, '_returnToCalendarAfterBooking'))
         //Add more custom fields to the CRUD UI
         //->add_action('Add Next of Kin', '', 'demo/action_more','ui-icon-plus')
-        //->add_action('Add Medical Aid','','demo/action_more','ui-icon-plus')
-        ->add_action('Call Back', '', '','ui-icon-image',array($this,'_callBack'));
+        ->add_action('Add Medical Aid','','','',array($this,'_callBack'))
+        ->add_action('Add Next of Kin', '', '','',array($this,'_callBack'))
+        //push output message and redirect after insert
+        ->set_lang_string(  'insert_success_message','Client Added to the system.'.
+                            '<br/>'.
+                            'Please wait to complete booking details.
+        <script type="text/javascript">
+        setTimeout(function(){
+            window.location = "'.base_url('booking/create/web/').'";
+        },3000);
+        </script>
+        <div style="display:none">
+        ');
         //render the output
         $this->_renderGroceryCRUDOutput($this->grocery_crud->render());
     }
@@ -79,8 +100,26 @@ class Dashboard extends CI_Controller {
         $this->load->view('Dashboard/employees.php',$output);
     }
 
-    function _callBack($primary_key , $row)
-    {
-        return base_url('aid/new/').'/'.$row->lastName;
+    function _generateClinicID($post){
+        //generate client ID
+        $query = $this->mydb->get_all("clients");
+        $int = (int)$query->row($query->num_rows())->id + 1;
+        $post['clinicID'] = "CC".$int;
+        $this->session->set_userdata('clinicID',$post['clinicID']);
+        return $post;
+    }
+
+    function _callBack($primaryKey , $row){
+        return base_url('some_function/some_method').'/'.$row->clinicID;
+    }
+
+    public function pass_booking_date(){
+    if(isset($_POST['date'])){
+        $date = array('date'=> $_POST['date'],'time'=>$_POST['time']);
+        $this->session->set_userdata('date',  $date);
+        redirect('dashboard/clients/add/');
+    }else{
+        redirect('dashboard/');
+    }
     }
 }

@@ -8,7 +8,7 @@ class App_model extends CI_Model{
 
     public function get_all($table_name, $limit=NULL, $offset=NULL)
     {
-       $this->db->order_by("id", "desc");
+       $this->db->order_by("id", "asc");
       return $this->db->get("$table_name",$limit,$offset);
 
     }
