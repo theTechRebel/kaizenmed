@@ -3,12 +3,11 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Dashboard extends CI_Controller {
 	/*
-	 * URI FUNCTIONS
+	 * URI FUNCTIONS/ PUBLIC METHODS
 	 */
 
-
 	/**
-	 * 1. kaizenmed/dashboard/index()
+	 * 1. kaizenmed/dashboard/index/ | kaizenmed/dashboard/
 	 * Index Page for this controller.
 	 *
 	 * Maps to the following URL
@@ -43,6 +42,18 @@ class Dashboard extends CI_Controller {
         echo "</pre>";
         die();
     }
+
+    /**
+     * 2. kaizenmed/dashboard/clients/ 
+     *      implementation of GroceryCRUD Library to access DB table clients and handle all CRUD
+     *      -Creation of a new Clients
+     *      -Reading of Clients or a single client
+     *      -Updating of Clients
+     *      -Deletion of Clients
+     *      
+     * Maps to the following URL
+     *      kaizenmed/dashboard/clinets
+     */
 
     public function clients()
     {
@@ -80,7 +91,9 @@ class Dashboard extends CI_Controller {
         //->add_action('Add Next of Kin', '', 'demo/action_more','ui-icon-plus')
         ->add_action('Add Medical Aid','','','',array($this,'_callBack'))
         ->add_action('Add Next of Kin', '', '','',array($this,'_callBack'))
-        //push output message and redirect after insert
+        //added hack to add a client and redirect to booking details page
+        //what it does is that it displays a message after successful insert
+        //then redirects to the booking details page after insert
         ->set_lang_string(  'insert_success_message','Client Added to the system.'.
                             '<br/>'.
                             'Please wait to complete booking details.
@@ -95,23 +108,14 @@ class Dashboard extends CI_Controller {
         $this->_renderGroceryCRUDOutput($this->grocery_crud->render());
     }
 
-    function _renderGroceryCRUDOutput($output = null){
-        $this->load->view('Require/grocery-crud-header.php',$output);
-        $this->load->view('Dashboard/employees.php',$output);
-    }
 
-    function _generateClinicID($post=null){
-        //generate client ID
-        $query = $this->mydb->get_all("clients");
-        $int = $query->row($query->num_rows())->id + 1;
-        $post['clinicID'] = "CC".$int;
-        $this->session->set_userdata('clinicID',$post['clinicID']);
-        return $post;
-    }
-
-    function _callBack($primaryKey , $row){
-        return base_url('some_function/some_method').'/'.$row->clinicID;
-    }
+    /**
+     * 3. kaizenmed/dashboard/pass_booking_date/
+     *      Handles passing of booking date and time from POST variable into the current session variable 
+     *      Then redirects to dashboard/clients/add/ to create a new clients record linked to the date and time
+     *      stored in the session to be used after creation of the clients record for booking details.
+     *      Not be accessed by the user but a quick hack for handling above mentioned functionality
+     */
 
     public function pass_booking_date(){
     if(isset($_POST['date'])){
@@ -122,4 +126,58 @@ class Dashboard extends CI_Controller {
         redirect('dashboard/');
     }
     }
+
+
+
+
+
+
+
+
+
+    /*
+     * PRIVATE FUNCTIONS not accessible via http://
+     * note all functions prepended with a _ character cannot be accessed via browser URL
+     * i.e kaizenmed/dashboard/_renderGroceryCRUDOutput/ will throw a 404
+     */
+    
+    /*
+     * 1. _renderGroceryCRUDOutput($output[GroceryCRUD array of .css and .js dependencies])
+     * function that takes in rocery crud output and renders the view to the user.
+     */
+    
+    function _renderGroceryCRUDOutput($output = null){
+        $this->load->view('Require/grocery-crud-header.php',$output);
+        $this->load->view('Dashboard/clients.php',$output);
+    }
+
+    /*
+     * 2. _generateClinicID($post=[POST VARIABLE])
+     * callback from public function clients(){...}
+     * Runs at ->callback_before_insert(array($this,'_generateClinicID'))
+     * and is run right before data is inserted in the DB.
+     * Its main purpose is to automaticlly generate a new Client ID and then
+     * add that id into the POST['clinicID'] variable that is then inserted in the clients table in the ClinicID field
+     */
+
+    function _generateClinicID($post=null){
+        //generate client ID
+        $query = $this->mydb->get_all("clients");
+        $int = $query->row($query->num_rows())->id + 1;
+        $post['clinicID'] = "CC".$int;
+        $this->session->set_userdata('clinicID',$post['clinicID']);
+        return $post;
+    }
+
+    /*
+     * TODO:create callbacks for various things
+     * such as adding Next of Kin and adding medical aid using this function, for now its just a placeholder.
+     */
+
+    function _callBack($primaryKey , $row){
+        return base_url('some_function/some_method').'/'.$row->clinicID;
+    }
 }
+
+/* End of file Dashboard.php */
+/* Location: ./application/controllers/Dashboard.php */

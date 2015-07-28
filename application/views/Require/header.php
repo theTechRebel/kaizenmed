@@ -15,7 +15,7 @@
 
     <!-- calendar plugin -->
     <script type="text/javascript" src="<?php echo base_url('uiux/js/calendar.js')?>"></script>
-    <link rel='stylesheet' href='<?php echo base_url('uiux/js/jquery-ui-theme.min.css')?>' />
+    <link rel='stylesheet' href='<?php echo base_url('uiux/css/jquery-ui-theme.min.css')?>' />
   </head>
 
   <!-- top navigation bar -->

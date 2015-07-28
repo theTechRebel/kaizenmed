@@ -117,3 +117,7 @@ class Booking extends CI_Controller {
         }
     }
 }
+
+
+/* End of file Booking.php */
+/* Location: ./application/controllers/Booking.php */
