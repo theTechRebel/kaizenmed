@@ -7,6 +7,36 @@ class Booking extends CI_Controller {
      * Booking Module that controls all Booking CRUD & .js functions
      *
      */
+    
+    /* Private functions associated with the /booking/ controller. */
+    /*
+     * 1. _readAPI(start [date of starting retrieval of data], end [date of ending of retrieval of data])
+     *  called at /booking/read/
+     *  provides access to the underlying data in the DB
+     *  returns it as an associative array of data i a specific format
+     *  data format to be retrieved:
+     *   $data = array(
+     *               0   => array(
+     *                       'title' => 'Joyce Samuriwo',
+     *                       'clinicID'  => 'CC34'   
+     *                       'details' => 'Liver cyclerosis',
+     *                       'doctor'    => 'C.Masiya',
+     *                       'start' => '2015-07-12T10:30:00',
+     *                       'end'   => '2015-07-12T12:30:00'
+     *                   )
+     *               );
+    */
+
+    private function _readAPI($start,$end){
+        $sql = "SELECT * FROM bookings WHERE date >= '$start' AND date <= '$end'";
+        $mydb = $this->db->query($sql);
+        $i = 0;
+        foreach($mydb->result_array() as $row){
+           $data[$i] = $row;
+           $i++;
+        }
+        return $data;
+    }
 
     /* URL END-POINTS that are associated with the /booking/ controller. */
     /*
@@ -31,6 +61,14 @@ class Booking extends CI_Controller {
         }
     }
 
+
+    /*
+     * 2. create(source [web,app, etc])
+     *  called at /booking/create/
+     *  creates a new booking
+     *  validates a form before input in the db
+    */
+
     public function create($source){
 
         switch ($source){
@@ -43,7 +81,9 @@ class Booking extends CI_Controller {
                     $mydb = $this->mydb->get_all_where('clients', array('clinicID'=>$this->session->clinicID), 1);
                     $client = $mydb->row_array(0);
 
-                    $mydb = $this->mydb->get_all('doctors');
+
+                    $this->db->order_by("id", "asc");
+                    $mydb = $this->db->get('doctors');
 
                     $dateAndTime = $this->session->date;
 
@@ -58,13 +98,13 @@ class Booking extends CI_Controller {
                 }else{
                     $dateAndTime = $this->session->date;
                     
-                    $data = array('date'        => $dateAndTime['date'],
-                                  'clinicID'    => $this->session->clinicID,
-                                  'client'      => $this->input->post('client'),
+                    $data = array('clinicID'    => $this->session->clinicID,
+                                  'title'      => $this->input->post('client'),
                                   'doctor'      => $this->input->post('doctor'),
                                   'details'     => $this->input->post('details'),
-                                  'start'       => $dateAndTime['time'],
-                                  'end'         => $this->input->post('end'));
+                                  'start'       => $dateAndTime['date'].' '.$dateAndTime['time'],
+                                  'end'         => $dateAndTime['date'].' '.$this->input->post('end'),
+                                  'date'        => $dateAndTime['date']);
 
                     $this->mydb->insert('bookings',$data);
                     redirect('dashboard');
@@ -75,67 +115,5 @@ class Booking extends CI_Controller {
 
                 break;
         }
-    }
-
-    private function _readAPI($start,$end){
-
-        $like_condition = array('date'=>$start,'date'=>$end);
-        $mydb = $this->mydb->get_all_like('bookings',$like_condition);
-
-        $data = array();
-        $i = 0;
-        foreach($mydb->result_array() as $row){
-           $data[$i] = $row;
-        }
-
-
-        //search database
-        //get events begining with start date and ending with end date
-        //return an object in event data format
-        /*
-        $data = array(
-                    0   => array(
-                        'title' => 'All Day Event',
-                        'start' => '2015-07-01'
-                        ),
-                    1   => array(
-                        'title' => 'Long Event',
-                        'start' => '2015-07-07',
-                        'end'   => '2015-07-10'
-                        ),
-                    2   => array(
-                        'id'    => 999,
-                        'title' => 'Repeating Event',
-                        'start' => 'Sat Jul 23 2015 11:00:00 '
-                        ),
-                    3   => array(
-                        'id'    => 999,
-                        'title' => 'Repeating Event',
-                        'start' => 'Sat Jul 25 2015 11:00:00 '
-                        ),
-                    4   => array(
-                        'title' => 'Joyce Samuriwo',
-                        'treatment' => 'Liver cyclerosis',
-                        'doctor'    => 'C.Masiya',
-                        'time'  => '11:45 AM',
-                        'start' => '2015-07-12T10:30:00',
-                        'end'   => '2015-07-12T12:30:00'
-                        ),
-                    5   => array(
-                        'title' => 'Lunch',
-                        'start' => '2015-07-12T12:00:00'
-                        ),
-                    6   => array(
-                        'title' => 'Birthday Party',
-                        'start' => '2015-06-13T07:00:00'
-                        ),
-                    7   => array(
-                        'title' => 'Click for Google',
-                        'url'   => 'http://google.com/',
-                        'start' => '2015-06-28'
-                        )
-                    );
-                    */
-        return $data;
     }
 }

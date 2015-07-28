@@ -100,10 +100,10 @@ class Dashboard extends CI_Controller {
         $this->load->view('Dashboard/employees.php',$output);
     }
 
-    function _generateClinicID($post){
+    function _generateClinicID($post=null){
         //generate client ID
         $query = $this->mydb->get_all("clients");
-        $int = (int)$query->row($query->num_rows())->id + 1;
+        $int = $query->row($query->num_rows())->id + 1;
         $post['clinicID'] = "CC".$int;
         $this->session->set_userdata('clinicID',$post['clinicID']);
         return $post;

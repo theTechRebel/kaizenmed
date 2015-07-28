@@ -4,6 +4,8 @@ $(function(){
     $('#calendar').fullCalendar({
         editable: true,
 
+        theme: true,
+
         events: 'http://localhost/kaizen/KaizenMed/booking/read/web/',
 
         header:{
