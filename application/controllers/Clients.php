@@ -18,7 +18,7 @@ class Clients extends CI_Controller {
     
     function _renderGroceryCRUDOutput($output = null){
         $this->load->view('Require/grocery-crud-header.php',$output);
-        $this->load->view('Dashboard/clients.php',$output);
+        $this->load->view('Clients/clients.php',$output);
     }
 
 
@@ -104,6 +104,28 @@ class Clients extends CI_Controller {
         ->add_action('Add Next of Kin', '', '','',array($this,'_callBack'));
         //render the output
         $this->_renderGroceryCRUDOutput($this->grocery_crud->render());
+    }
+
+
+    /**
+     * 2. kaizenmed/clients/read/
+     *    Ajax Request end point to retrieve clients
+     *    via booking modal for selection of clients 
+     */
+    public function read(){
+        $query ="SELECT * FROM clients WHERE name like '" . $_POST["keyword"] . "%' OR surname like '" . $_POST["keyword"] . "%' ORDER BY id LIMIT 10";
+        $mydb = $this->db->query($query);
+
+        $data = array();
+        $i =0;
+        if($mydb->num_rows() > 0) {
+        foreach ($mydb->result_array() as $row) {
+            $data[$i] = $row['name'].' '.$row['surname'];
+            $i++;
+            }
+        }
+
+        echo json_encode($data);
     }
 }
 

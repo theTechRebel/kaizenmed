@@ -36,21 +36,22 @@
 </nav>
 
 <!-- This is the off-canvas sidebar -->
-<div id="side-bar" class="uk-offcanvas">
+  <!-- This is the off-canvas sidebar -->
+  <div id="side-bar" class="uk-offcanvas">
     <div class="uk-offcanvas-bar">
-        <ul class="uk-nav uk-nav-offcanvas uk-nav-parent-icon">
-            <li class="uk-nav-divider"></li>
-            <li class="uk-nav-header">KaizenMed e-Clinic</li>
-            <li class="uk-nav-divider"></li>
-            <li><a href="<?php echo base_url('dashboard');?>"><i class="uk-icon-calendar-o"></i>  Calendar</a></li>
-            <li><a href="<?php echo base_url('dashboard/clients/');?>"><i class="uk-icon-group"></i>  Clients</a></li>
-            <li><a href="<?php echo base_url('auth/log_out/');?>"><i class="uk-icon-sign-out"></i>  Log Out</a></li>
-            <li class="uk-nav-divider"></li>
-            <li class="uk-nav-header">User Details</li>
-            <li class="uk-nav-header"><i class="uk-icon-user"></i>  <?php echo $this->session->details;?></li>
-            <li class="uk-nav-header"><i class="uk-icon-lock"> <?php echo $this->session->userlevel;?></i></li>
-        </ul>
+      <ul class="uk-nav uk-nav-offcanvas uk-nav-parent-icon">
+        <li class="uk-nav-divider"></li>
+        <li class="uk-nav-header">KaizenMed e-Clinic</li>
+        <li class="uk-nav-divider"></li>
+        <li><a href="<?php echo base_url('calendar');?>"><i class="uk-icon-calendar-o"></i>  Calendar</a></li>
+        <li><a href="<?php echo base_url('clients');?>"><i class="uk-icon-group"></i>  Clients</a></li>
+        <li><a href="<?php echo base_url('auth/log_out/');?>"><i class="uk-icon-sign-out"></i>  Log Out</a></li>
+        <li class="uk-nav-divider"></li>
+        <li class="uk-nav-header">User Details</li>
+        <li class="uk-nav-header"><i class="uk-icon-user"></i>  <?php echo $this->session->details;?></li>
+        <li class="uk-nav-header"><i class="uk-icon-lock"> <?php echo $this->session->userlevel;?></i></li>
+      </ul>
 
     </div>
-</div>
+  </div>
 

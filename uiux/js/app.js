@@ -12,7 +12,7 @@ $(function(){
 			if($(this).val() != ''){
 								$.ajax({
 								type: "POST",
-								url: "http://localhost/kaizen/KaizenMed/Dashboard/getClients/",
+								url: "http://localhost/kaizen/KaizenMed/clients/read/",
 								data:'keyword='+$(this).val(),
 								beforeSend: function(){
 									$("#search-box").css("background","#FFF url(http://localhost/kaizen/KaizenMed/uiux/img/LoaderIcon.gif) no-repeat 165px");

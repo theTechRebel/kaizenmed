@@ -36,7 +36,7 @@ class Auth extends CI_Controller {
 
   public function index(){
       if($this->session->userdata('logged_in') == TRUE){
-          redirect('dashboard');
+          redirect('calendar');
       }else{
         $this->form_validation->set_rules('username', 'Username', 'required');
         $this->form_validation->set_rules('password', 'Password', 'required');
@@ -63,7 +63,7 @@ class Auth extends CI_Controller {
                 $this->load->view('Require/footer');
             }else{
                 $this->_startSession($data['details'],$data['userlevel']);
-                redirect('dashboard');
+                redirect('calendar');
             }
 
         }else{
@@ -98,7 +98,7 @@ class Auth extends CI_Controller {
     */
       public function recover(){
        if($this->session->userdata('logged_in')==TRUE) {
-           redirect('dashboard');
+           redirect('calendar');
        }else{
           $this->form_validation->set_rules('username', 'Username', 'required');
 

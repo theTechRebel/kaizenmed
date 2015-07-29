@@ -1,32 +1,3 @@
-23-07-2015
-
-KaizenMed V 0.0.1
-=
-
-RELEASE NOTE:
-=
-Auth Module added to KaizenMed
-
-
-
-CHANGES
-=
-
-1. Added ./uiux/bower_componets/, and ./uiux/uikit/ UI interface Framework UIKIT.
-2. Added Auth Controller with documentation with its views generated from Auth folder in ./application/views/
-3. Added ./application/models/App_model.php as boiler plate database access model.
-			Bieng autoloaded in ./application/config/autoload.php line 140 and accessed in the system as $this->mydb
-			See Codeigniter dcumentation Query Builder Class for the new shortcut notation for models.
-
-THOUGHTS
-=
-
-Decoupling Views is awesome!
-
-@theTechRebel
-=
-====================================================================================================================================
-
 28-07-2015
 
 KaizenMed V 0.1.1
@@ -82,6 +53,36 @@ CHANGES
 THOUGHTS
 =
 KaizenMed is coming along well, cant wait to pull data from the app!
+
+@theTechRebel
+=
+====================================================================================================================================
+
+
+23-07-2015
+
+KaizenMed V 0.0.1
+=
+
+RELEASE NOTE:
+=
+Auth Module added to KaizenMed
+
+
+
+CHANGES
+=
+
+1. Added ./uiux/bower_componets/, and ./uiux/uikit/ UI interface Framework UIKIT.
+2. Added Auth Controller with documentation with its views generated from Auth folder in ./application/views/
+3. Added ./application/models/App_model.php as boiler plate database access model.
+			Bieng autoloaded in ./application/config/autoload.php line 140 and accessed in the system as $this->mydb
+			See Codeigniter dcumentation Query Builder Class for the new shortcut notation for models.
+
+THOUGHTS
+=
+
+Decoupling Views is awesome!
 
 @theTechRebel
 =

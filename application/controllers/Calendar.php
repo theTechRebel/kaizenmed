@@ -167,27 +167,6 @@ class Calendar extends CI_Controller {
         redirect('calendar/');
     }
     }
-
-    /**
-     * 4. kaizenmed/calendar/getClients/
-     *    Ajax Request end point to retrieve clients
-     *    via booking modal for selection of clients 
-     */
-    public function getClients(){
-        $query ="SELECT * FROM clients WHERE name like '" . $_POST["keyword"] . "%' OR surname like '" . $_POST["keyword"] . "%' ORDER BY id LIMIT 10";
-        $mydb = $this->db->query($query);
-
-        $data = array();
-        $i =0;
-        if($mydb->num_rows() > 0) {
-        foreach ($mydb->result_array() as $row) {
-            $data[$i] = $row['name'].' '.$row['surname'];
-            $i++;
-            }
-        }
-
-        echo json_encode($data);
-    }
 }
 
 
