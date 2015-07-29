@@ -54,8 +54,6 @@ $(function(){
 
         eventClick: function(booking, jsEvent, view) {
 
-            console.log(booking);
-
             var modal = UIkit.modal("#view-booking");
 
             if ( modal.isActive() ) {

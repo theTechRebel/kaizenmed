@@ -1,25 +1,66 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
+/*
+ * Calendar Module Controller
+ * controls Calendar display, event management and viewing
+ *
+ */
 
-class Dashboard extends CI_Controller {
-	/*
-	 * URI FUNCTIONS/ PUBLIC METHODS
-	 */
+class Calendar extends CI_Controller {
+/*
+* PRIVATE FUNCTIONS not accessible via http://
+* note all functions prepended with a _ character cannot be accessed via browser URL
+* i.e kaizenmed/calendar/_renderGroceryCRUDOutput/ will throw a 404
+*/
+    
+    /*
+     * 1. _renderGroceryCRUDOutput($output[GroceryCRUD array of .css and .js dependencies])
+     * function that takes in rocery crud output and renders the view to the user.
+     */
+    
+    function _renderGroceryCRUDOutput($output = null){
+        $this->load->view('Require/grocery-crud-header.php',$output);
+        $this->load->view('calendar/clients.php',$output);
+    }
+
+    /*
+     * 2. _generateClinicID($post=[POST VARIABLE])
+     * callback from public function clients(){...}
+     * Runs at ->callback_before_insert(array($this,'_generateClinicID'))
+     * and is run right before data is inserted in the DB.
+     * Its main purpose is to automaticlly generate a new Client ID and then
+     * add that id into the POST['clinicID'] variable that is then inserted in the clients table in the ClinicID field
+     */
+
+    function _generateClinicID($post=null){
+        //generate client ID
+        $query = $this->mydb->get_all("clients");
+        $int = $query->row($query->num_rows())->id + 1;
+        $post['clinicID'] = "CC".$int;
+        $this->session->set_userdata('clinicID',$post['clinicID']);
+        return $post;
+    }
+/* END OF PRIVATE FUNCTIONS*/
+
+
+/*
+ *  URL END-POINTS/ PUBLIC METHODS that are associated with the
+ */
 
 	/**
-	 * 1. kaizenmed/dashboard/index/ | kaizenmed/dashboard/
+	 * 1. kaizenmed/calendar/index/ | kaizenmed/calendar/
 	 * Index Page for this controller.
 	 *
 	 * Maps to the following URL
-	 * 		http://kaizenmed/dashboard/
+	 * 		http://kaizenmed/calendar/
 	 *	- or -
-	 * 		http://kaizenmed/dashboard//index
+	 * 		http://kaizenmed/calendar/index
 	 *	- or -
 	 * Since this controller is set as the default controller in
 	 * config/routes.php, it's displayed at http://kaizenmed/
 	 *
 	 * So any other public methods not prefixed with an underscore will
-	 * map to /kaizenmed/dashboard/<method_name>
+	 * map to /kaizenmed/calendar/<method_name>
 	 * @see http://codeigniter.com/user_guide/general/urls.html
 	 */
 	public function index()
@@ -28,7 +69,7 @@ class Dashboard extends CI_Controller {
             redirect('auth');
         }else{
             $this->load->view('Require/header');
-            $this->load->view('Dashboard/dashboard');
+            $this->load->view('Calendar/calendar');
             $this->load->view('Require/footer');
         }
 	}
@@ -44,7 +85,7 @@ class Dashboard extends CI_Controller {
     }
 
     /**
-     * 2. kaizenmed/dashboard/clients/ 
+     * 2. kaizenmed/calendar/clients/ 
      *      implementation of GroceryCRUD Library to access DB table clients and handle all CRUD
      *      -Creation of a new Clients
      *      -Reading of Clients or a single client
@@ -52,7 +93,7 @@ class Dashboard extends CI_Controller {
      *      -Deletion of Clients
      *      
      * Maps to the following URL
-     *      kaizenmed/dashboard/clinets
+     *      kaizenmed/calendar/clinets
      */
 
     public function clients()
@@ -89,8 +130,8 @@ class Dashboard extends CI_Controller {
         //->callback_after_insert(array($this, '_returnToCalendarAfterBooking'))
         //Add more custom fields to the CRUD UI
         //->add_action('Add Next of Kin', '', 'demo/action_more','ui-icon-plus')
-        ->add_action('Add Medical Aid','','','',array($this,'_callBack'))
-        ->add_action('Add Next of Kin', '', '','',array($this,'_callBack'))
+        //->add_action('Add Medical Aid','','','',array($this,'_callBack'))
+        //->add_action('Add Next of Kin', '', '','',array($this,'_callBack'))
         //added hack to add a client and redirect to booking details page
         //what it does is that it displays a message after successful insert
         //then redirects to the booking details page after insert
@@ -110,9 +151,9 @@ class Dashboard extends CI_Controller {
 
 
     /**
-     * 3. kaizenmed/dashboard/pass_booking_date/
+     * 3. kaizenmed/calendar/pass_booking_date/
      *      Handles passing of booking date and time from POST variable into the current session variable 
-     *      Then redirects to dashboard/clients/add/ to create a new clients record linked to the date and time
+     *      Then redirects to calendar/clients/add/ to create a new clients record linked to the date and time
      *      stored in the session to be used after creation of the clients record for booking details.
      *      Not be accessed by the user but a quick hack for handling above mentioned functionality
      */
@@ -121,14 +162,14 @@ class Dashboard extends CI_Controller {
     if(isset($_POST['date'])){
         $date = array('date'=> $_POST['date'],'time'=>$_POST['time']);
         $this->session->set_userdata('date',  $date);
-        redirect('dashboard/clients/add/');
+        redirect('calendar/clients/add/');
     }else{
-        redirect('dashboard/');
+        redirect('calendar/');
     }
     }
 
     /**
-     * 4. kaizenmed/dashboard/getClients/
+     * 4. kaizenmed/calendar/getClients/
      *    Ajax Request end point to retrieve clients
      *    via booking modal for selection of clients 
      */
@@ -147,58 +188,9 @@ class Dashboard extends CI_Controller {
 
         echo json_encode($data);
     }
-
-
-
-
-
-
-
-
-
-    /*
-     * PRIVATE FUNCTIONS not accessible via http://
-     * note all functions prepended with a _ character cannot be accessed via browser URL
-     * i.e kaizenmed/dashboard/_renderGroceryCRUDOutput/ will throw a 404
-     */
-    
-    /*
-     * 1. _renderGroceryCRUDOutput($output[GroceryCRUD array of .css and .js dependencies])
-     * function that takes in rocery crud output and renders the view to the user.
-     */
-    
-    function _renderGroceryCRUDOutput($output = null){
-        $this->load->view('Require/grocery-crud-header.php',$output);
-        $this->load->view('Dashboard/clients.php',$output);
-    }
-
-    /*
-     * 2. _generateClinicID($post=[POST VARIABLE])
-     * callback from public function clients(){...}
-     * Runs at ->callback_before_insert(array($this,'_generateClinicID'))
-     * and is run right before data is inserted in the DB.
-     * Its main purpose is to automaticlly generate a new Client ID and then
-     * add that id into the POST['clinicID'] variable that is then inserted in the clients table in the ClinicID field
-     */
-
-    function _generateClinicID($post=null){
-        //generate client ID
-        $query = $this->mydb->get_all("clients");
-        $int = $query->row($query->num_rows())->id + 1;
-        $post['clinicID'] = "CC".$int;
-        $this->session->set_userdata('clinicID',$post['clinicID']);
-        return $post;
-    }
-
-    /*
-     * TODO:create callbacks for various things
-     * such as adding Next of Kin and adding medical aid using this function, for now its just a placeholder.
-     */
-
-    function _callBack($primaryKey , $row){
-        return base_url('some_function/some_method').'/'.$row->clinicID;
-    }
 }
 
-/* End of file Dashboard.php */
-/* Location: ./application/controllers/Dashboard.php */
+
+
+/* End of file Calendar.php */
+/* Location: ./application/controllers/Calendar.php */

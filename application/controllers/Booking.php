@@ -1,14 +1,13 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
+/*
+* Booking Module Controller 
+* controls all Booking CRUD & related .js functions
+*/
 
 class Booking extends CI_Controller {
-
-    /*
-     * Booking Module that controls all Booking CRUD & .js functions
-     *
-     */
+/* PRIVATE FUNCTIONS not accessible via http://
     
-    /* Private functions associated with the /booking/ controller. */
     /*
      * 1. _readAPI(start [date of starting retrieval of data], end [date of ending of retrieval of data])
      *  called at /booking/read/
@@ -37,8 +36,9 @@ class Booking extends CI_Controller {
         }
         return $data;
     }
+/* END OF PRIVATE FUNCTIONS*/
 
-    /* URL END-POINTS that are associated with the /booking/ controller. */
+/* URL END-POINTS that are associated with the /booking/ controller. */
     /*
      * 1. read(source [web,app, etc])
      *  called at /booking/read/
@@ -107,7 +107,7 @@ class Booking extends CI_Controller {
                                   'date'        => $dateAndTime['date']);
 
                     $this->mydb->insert('bookings',$data);
-                    redirect('dashboard');
+                    redirect('calendar');
                 }
                 break;
 

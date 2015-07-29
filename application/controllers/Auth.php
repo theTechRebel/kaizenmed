@@ -1,18 +1,15 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+/*
+ * Auth Module Controller
+ * Controls Access to the system (login) hence Auth for Authorization
+ */
 
 class Auth extends CI_Controller {
-    /*
-     * Controller to Auth module
-     *
-     * Controls Access to the system hence Auth for Authorization
-     */
-
-    /* PRIVATE FUNCTIONS*/
+/* PRIVATE FUNCTIONS not accessible via http://
 
     /* 1. _startSession(detail[name surname etc],userlevel[admin, nurse, reception etc])
-     *   starts a users session on the system initiating that they have
-     *    officially logged in.
-     *
+     *   starts a users session on the system initiating that they have logged in.
+     *   and asigns them their rights and user level
     */
 
     private function _startSession($details,$userlevel){
@@ -24,11 +21,11 @@ class Auth extends CI_Controller {
 
         $this->session->set_userdata($userdata);
     }
-    /* END OF PRIVATE FUNCTIONS*/
+/* END OF PRIVATE FUNCTIONS*/
 
 
 
-    /* URL END-POINTS that are associated with the /auth/ controller. */
+/* URL END-POINTS/ PUBLIC METHODS that are associated with the /auth/ controller. */
    /*
     * 1. index()
     *  called at /auth/ and /auth/index/

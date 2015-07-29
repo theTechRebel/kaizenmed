@@ -33,8 +33,8 @@
         <li class="uk-nav-divider"></li>
         <li class="uk-nav-header">KaizenMed e-Clinic</li>
         <li class="uk-nav-divider"></li>
-        <li><a href="<?php echo base_url('dashboard');?>"><i class="uk-icon-calendar-o"></i>  Calendar</a></li>
-        <li><a href="<?php echo base_url('dashboard/clients/');?>"><i class="uk-icon-group"></i>  Clients</a></li>
+        <li><a href="<?php echo base_url('calendar');?>"><i class="uk-icon-calendar-o"></i>  Calendar</a></li>
+        <li><a href="<?php echo base_url('clients');?>"><i class="uk-icon-group"></i>  Clients</a></li>
         <li><a href="<?php echo base_url('auth/log_out/');?>"><i class="uk-icon-sign-out"></i>  Log Out</a></li>
         <li class="uk-nav-divider"></li>
         <li class="uk-nav-header">User Details</li>
