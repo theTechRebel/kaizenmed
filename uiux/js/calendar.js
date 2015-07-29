@@ -2,6 +2,17 @@
 $(function(){
     // page is now ready, initialize the calendar...
     $('#calendar').fullCalendar({
+
+        eventLimit: true, // for all non-agenda views
+
+        views: {
+            month: {
+                eventLimit: 4 // adjust to 6 only for agendaWeek/agendaDay
+            }
+        },
+
+        eventLimitClick: "week",
+
         editable: true,
 
         theme: true,
@@ -33,9 +44,6 @@ $(function(){
                 
                 var dateFormated = date.format("YYYY-MM-DD");
                 var timeFormated = date.format("HH:mm");
-
-                console.log(dateFormated);
-                console.log(timeFormated);
                 
                 modal.find($('#selected-date').text(dateFormated+' '+timeFormated));
                 modal.find($('#post-date').val(dateFormated));
@@ -46,15 +54,19 @@ $(function(){
 
         eventClick: function(booking, jsEvent, view) {
 
+            console.log(booking);
+
             var modal = UIkit.modal("#view-booking");
 
             if ( modal.isActive() ) {
                 modal.hide();
             } else {
                 modal.find($('#booking-title').text(booking.title));
-                modal.find($('#booking-doctor').text(booking.doctor));
-                modal.find($('#booking-treatment').text(booking.treatment));
-                modal.find($('#booking-time').text(booking.time));
+                modal.find($('#booking-doctor').text("to see Doctor."+booking.doctor));
+                modal.find($('#booking-details').text('Purpose of appointment: '+booking.details));
+                modal.find($('#booking-date').text("Date "+booking.date));
+                modal.find($('#booking-start').text(booking.start));
+                modal.find($('#booking-end').text(booking.end));
                 modal.show();
             }
 

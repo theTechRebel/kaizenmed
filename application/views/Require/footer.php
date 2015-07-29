@@ -46,7 +46,9 @@
         <a class="uk-modal-close uk-close"></a>
         <div id="booking-title"></div>
         <div id="booking-doctor"></div>
-        <div id="booking-treatment"></div>
-        <div id="booking-time"></div>
+        <div id="booking-details"></div>
+        <div id="booking-date"></div>
+        <div id="booking-start"></div>
+        <div id="booking-end"></div>
     </div>
 </div>
