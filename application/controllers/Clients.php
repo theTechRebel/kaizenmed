@@ -120,7 +120,8 @@ class Clients extends CI_Controller {
         $i =0;
         if($mydb->num_rows() > 0) {
         foreach ($mydb->result_array() as $row) {
-            $data[$i] = $row['name'].' '.$row['surname'];
+            $data[$i] = array('name' => $row['name'].' '.$row['surname'],
+                              'clinicID'   => $row['clinicID']);
             $i++;
             }
         }

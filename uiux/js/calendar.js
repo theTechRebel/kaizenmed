@@ -48,6 +48,10 @@ $(function(){
                 modal.find($('#selected-date').text(dateFormated+' '+timeFormated));
                 modal.find($('#post-date').val(dateFormated));
                 modal.find($('#post-time').val(timeFormated));
+
+                modal.find($("#post-date2").val(dateFormated));
+                modal.find($("#post-time2").val(timeFormated));
+                            
                 modal.show();
             }
         },

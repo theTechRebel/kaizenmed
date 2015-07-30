@@ -151,14 +151,24 @@ class Calendar extends CI_Controller {
 
 
     /**
-     * 3. kaizenmed/calendar/pass_booking_date/
-     *      Handles passing of booking date and time from POST variable into the current session variable 
-     *      Then redirects to calendar/clients/add/ to create a new clients record linked to the date and time
+     * 3. kaizenmed/calendar/pass_booking_details/
+     *      Handles passing of booking date and time and clinciID from POST variable into the current session variable 
+     *      Then redirects to calendar/clients/add/ to create a new clients record
+     *      or redirects to booking/create/web/ to create a new booking
+     *      linked to the date and time and clinicID of the client
      *      stored in the session to be used after creation of the clients record for booking details.
      *      Not be accessed by the user but a quick hack for handling above mentioned functionality
      */
 
-    public function pass_booking_date(){
+    public function pass_booking_details(){
+
+    if(isset($_POST['clinicID'])){
+        $this->session->set_userdata('clinicID',$_POST['clinicID']);
+        $date = array('date'=> $_POST['date'],'time'=>$_POST['time']);
+        $this->session->set_userdata('date',  $date);
+        redirect('booking/create/web/');
+    }
+
     if(isset($_POST['date'])){
         $date = array('date'=> $_POST['date'],'time'=>$_POST['time']);
         $this->session->set_userdata('date',  $date);

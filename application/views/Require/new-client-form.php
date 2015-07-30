@@ -14,7 +14,7 @@ $data = array(
 		    	)
 );
 
-echo form_open('calendar/pass_booking_date/','class="uk-form"');
+echo form_open('calendar/pass_booking_details/','class="uk-form"');
 echo form_input($data[0]);
 echo form_input($data[1]);
 echo form_submit('submit', 'Add Client','class="uk-button"');

@@ -24,7 +24,7 @@ $(function(){
 										$("#suggestion-box").show();
 										var list = '<ul class="uk-nav uk-nav-dropdown">';
 										for (i = 0; i < clients.length; i++) {
-											list += '<li class="clickClientName"><a href="#">'+clients[i]+'</a></li>';
+											list += '<li class="clickClientName" id="'+clients[i]['clinicID']+'" ><a href="#">'+clients[i]['name']+'</a></li>';
 										}
 										list += '</ul>';
 
@@ -53,6 +53,10 @@ $(function(){
 
 //when an item in dropdow list is clicked do something
 	$(".uk-button-dropdown").on('click','.clickClientName',function(){
+
+			var modal = UIkit.modal("#add-booking");
+			modal.find($("#clinic-id").attr('value',$(this).attr('id')));
+
 			$("#search-box").val($(this).text());
 			$("#suggestion-box").hide();
 	});
