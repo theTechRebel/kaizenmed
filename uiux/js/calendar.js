@@ -3,6 +3,42 @@ $(function(){
     // page is now ready, initialize the calendar...
     $('#calendar').fullCalendar({
 
+        eventDrop: function( event, delta, revertFunc, jsEvent, ui, view ){ 
+            alert("Appointment "+event.title + " was dropped on " + event.start.format());
+            //desired format
+            //2015-06-28 & 13:00:00
+            //var d = date.format("HH:mm:ss"); - 24 hour notation
+            //var d = date.format("YYYY-MM-DD"); - date dashed format
+
+                var data = {
+                    'date': event.start.format("YYYY-MM-DD"),
+                    'doctor': event.doctor,
+                    'title': event.title,
+                    'id': event.id,
+                    'clinicID': event.clinicID,
+                    'start': event.start.format(),
+                    'end': event.end.format(),
+                    'details': event.details
+                }
+
+            if (!confirm("Are you sure about this change?")) {
+                revertFunc();
+            }else{
+                $.ajax({
+                    type: "POST",
+                    url: "http://localhost/kaizen/KaizenMed/booking/update/web/",
+                    data:data,
+                success: function(data){
+                    console.log(data);
+                },
+                crossDomain: true,
+                error: function(error){
+                    console.log(error);
+                }
+            });
+            }
+        },
+
         eventLimit: true, // for all non-agenda views
 
         views: {

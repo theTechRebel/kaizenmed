@@ -116,6 +116,36 @@ class Booking extends CI_Controller {
                 break;
         }
     }
+
+    /*
+     * 3. update(source [web,app, etc])
+     *  called at /booking/update/
+     *  updates the details of an existing booking
+    */
+    public function update($source){
+        switch($source){
+            case "web":
+                  $data = array(  'title'     => $this->input->post('title'),
+                                  'doctor'    => $this->input->post('doctor'),
+                                  'date'      => $this->input->post('date'),
+                                  'details'   => $this->input->post('details'),
+                                  'start'     => $this->input->post('start'),
+                                  'end'       => $this->input->post('end'),
+                                  'clinicID'  => $this->input->post('clinicID'));
+                  
+                if($this->mydb->update('bookings', $data, array('id'=>$this->input->post('id')))){
+                    return true;
+                }else{
+                    return false;
+                }
+                    
+            break;
+
+            case "app":
+
+            break;
+        }
+    }
 }
 
 
