@@ -4,7 +4,7 @@ $(function(){
     $('#calendar').fullCalendar({
 
             eventResize: function(event, delta, revertFunc) {
-                alert("Appointment "+event.title + " end is now " + event.end.format());
+                alert("Appointment "+event.title + " end is now " + event.end.format("YYYY-MM-DD @ HH:mm")+" Hrs");
 
                 var data = {
                             'date': event.start.format("YYYY-MM-DD"),
@@ -37,7 +37,7 @@ $(function(){
         },
 
         eventDrop: function( event, delta, revertFunc, jsEvent, ui, view ){ 
-            alert("Appointment "+event.title + " was dropped on " + event.start.format());
+            alert("Appointment "+event.title + " was dropped on " + event.start.format("YYYY-MM-DD @ HH:mm")+" Hrs");
 
                 var data = {
                     'date': event.start.format("YYYY-MM-DD"),
