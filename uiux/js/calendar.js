@@ -80,7 +80,7 @@ $(function(){
 
         editable: true,
 
-        theme: true,
+        theme: false,
 
         events: 'http://localhost/kaizen/KaizenMed/booking/read/web/',
 
@@ -93,7 +93,8 @@ $(function(){
         dayClick: function(date, jsEvent, view){
             //if a user clicks on a day change view to agendaWeek View
             if(view.name == 'month'){
-                $('#calendar').fullCalendar('changeView','agendaWeek');
+                $('#calendar').fullCalendar('changeView', 'agendaDay');
+                $('#calendar').fullCalendar('gotoDate',date.format());
                 return;
             }
 
