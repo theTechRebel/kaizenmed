@@ -40,6 +40,10 @@ class Clients extends CI_Controller {
         return $post;
     }
 
+    function _addClinicID($post=null){
+        die(var_dump($post));
+    }
+
     /*
      * TODO:create callbacks for various things
      * such as adding Next of Kin and adding medical aid using this function, for now its just a placeholder.
@@ -54,7 +58,7 @@ class Clients extends CI_Controller {
      * 1. personResponsibleForAccount
      */
     function _personResponsibleForAccount($pk, $row){
-       return base_url('clients/account').'/'.$row->clinicID; 
+       return base_url('clients/account').'/'.$row->clinicID;
     }
 /* END OF PRIVATE FUNCTIONS*/
 
@@ -163,7 +167,7 @@ class Clients extends CI_Controller {
     
     public function account($clinicID){
         //define parameter for which data you want to get from db
-        $this->grocery_crud->where('clients_account.clinicID',$clinicID)
+        $this->grocery_crud->where('clinic_ID',$clinicID)
         //which table to work with
         ->set_table('clients_account')
         //set subject of the list
@@ -172,15 +176,17 @@ class Clients extends CI_Controller {
         if ($this->grocery_crud->getState() == 'add' OR $this->grocery_crud->getState() == 'edit')
         {
             $this->grocery_crud->set_theme('datatables');
+            $this->grocery_crud->field_type('clinic_ID', 'hidden', $clinicID);
         }
         else
         {
             $this->grocery_crud->set_theme('twitter-bootstrap');
+            $this->grocery_crud->set_relation('clinic_ID','clients','{clinicID}: {name} {surname}');
         }
         //which colunms to display in list
-         $this->grocery_crud->columns('clinicID','title','fname','sname')
+         $this->grocery_crud->columns('clinic_ID','title','fname','sname')
         //display DB colunms as what
-        ->display_as('clinicID','Related Patient ID')
+        ->display_as('clinic_ID','Related Patient')
         ->display_as('title','Title')
         ->display_as('fname','First Name')
         ->display_as('sname','Surname')
@@ -192,12 +198,11 @@ class Clients extends CI_Controller {
         ->display_as('post','Postal Address')
         //->display_as('officeCode','Office City')
         //which fields to show in forms
-        ->fields('title','fname','sname','idnumber',
+        ->fields('clinic_ID','title','fname','sname','idnumber',
                  'address','work','post')
         //which fields are required to save data in the db
-        ->required_fields('title','fname','sname','address')
-        //which table to link to
-        ->set_relation('clinicID','clients','{clinicID} : {name} {surname}',array('clinicID' => $clinicID));
+        ->required_fields('title','fname','sname','address');
+        //pre-populate the clincID field with value selected before  
         //make the ClientID field invisible to the user
         //->change_field_type('clinicID','visible');
         //before inserting the data run this callback function
