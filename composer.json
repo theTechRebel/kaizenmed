@@ -3,7 +3,8 @@
 	"name" : "AfriKaizen/KaizenMed",
 	"license": "Kaizen",
 	"require": {
-		"php": ">=5.2.4"
+		"php": ">=5.2.4",
+		"videlalvaro/php-amqplib": "v2.1.0"
 	},
 	"require-dev": {
 	}

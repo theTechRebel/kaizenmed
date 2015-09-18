@@ -281,6 +281,14 @@ switch (ENVIRONMENT)
 	}
 
 	define('VIEWPATH', $view_folder);
+/*
+ * --------------------------------------------------------------------
+ * LOAD IN COMPOSER SUPPORT
+ * --------------------------------------------------------------------
+ *
+ * Stop making CodeIgniter libraries, Laravel bundles and Zend modules, make Composer packages.
+ */
+include_once './vendor/autoload.php';
 
 /*
  * --------------------------------------------------------------------
