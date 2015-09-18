@@ -73,7 +73,7 @@ class Clients extends CI_Controller {
         //set subject of the list
         ->set_subject('Client')
         //set the display theme
-        ->set_theme('datatables')
+        ->set_theme('twitter-bootstrap')
         //which colunms to display in list
         ->columns('clinicID','name','surname','gender')
         //display DB colunms as what
