@@ -115,9 +115,16 @@ class Calendar extends CI_Controller {
         ->display_as('notes','Additional Information')
         ->display_as('email','Email Address')
         ->display_as('phone','Phone Number')
+        ->display_as('dob','Date of Birth')
+        ->display_as('marital','Marital Status')
+        ->display_as('language','Home language')
+        ->display_as('occupation','Occupation')
+        ->display_as('title','Title')
         //->display_as('officeCode','Office City')
         //which fields to show in forms
-        ->fields('clinicID','name','surname','gender','idnumber','email','phone','notes')
+        ->fields('clinicID','title','name','surname','gender',
+                 'idnumber','email','phone','occupation','dob',
+                 'marital','language','notes')
         //which fields are required to save data in the db
         ->required_fields('name','surname','gender','phone')
         //which table to link to

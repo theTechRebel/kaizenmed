@@ -85,9 +85,16 @@ class Clients extends CI_Controller {
         ->display_as('notes','Additional Information')
         ->display_as('email','Email Address')
         ->display_as('phone','Phone Number')
+        ->display_as('dob','Date of Birth')
+        ->display_as('marital','Marital Status')
+        ->display_as('language','Home language')
+        ->display_as('occupation','Occupation')
+        ->display_as('title','Title')
         //->display_as('officeCode','Office City')
         //which fields to show in forms
-        ->fields('clinicID','name','surname','gender','idnumber','email','phone','notes')
+        ->fields('clinicID','title','name','surname','gender',
+                 'idnumber','email','phone','occupation','dob',
+                 'marital','language','notes')
         //which fields are required to save data in the db
         ->required_fields('name','surname','gender','phone')
         //which table to link to
@@ -100,8 +107,11 @@ class Clients extends CI_Controller {
         //->callback_after_insert(array($this, '_returnToCalendarAfterBooking'))
         //Add more custom fields to the CRUD UI
         //->add_action('Add Next of Kin', '', 'demo/action_more','ui-icon-plus')
-        ->add_action('Add Medical Aid','','','',array($this,'_callBack'))
-        ->add_action('Add Next of Kin', '', '','',array($this,'_callBack'));
+        ->add_action('Person Responsible for Account','','','',array($this,'_callBack'))
+        ->add_action('Medical Aid','','','',array($this,'_callBack'))
+        ->add_action('Nearest Family / Friend','','','',array($this,'_callBack'))
+        ->add_action('Referred By','','','',array($this,'_callBack'))
+        ->add_action('Family Details', '', '','',array($this,'_callBack'));
         //render the output
         $this->_renderGroceryCRUDOutput($this->grocery_crud->render());
     }
