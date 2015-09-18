@@ -162,8 +162,10 @@ class Clients extends CI_Controller {
      */
     
     public function account($clinicID){
+        //define parameter for which data you want to get from db
+        $this->grocery_crud->where('clients_account.clinicID',$clinicID)
         //which table to work with
-        $this->grocery_crud->set_table('clients_account')
+        ->set_table('clients_account')
         //set subject of the list
         ->set_subject('Person Responsible for Account');
         //set the display theme
