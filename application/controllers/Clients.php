@@ -88,6 +88,13 @@ class Clients extends CI_Controller {
     function _familyDeatils($pk, $row){
         return base_url('clients/family').'/'.$row->clinicID; 
     }
+
+    /*
+     * 6. Results
+     */
+    function _medicalHistory($pk,$row){
+        return base_url('clients/results').'/'.$row->clinicID; 
+    }
 /* END OF PRIVATE FUNCTIONS*/
 
 /* URL END-POINTS that are associated with the /clients/ controller. */
@@ -158,7 +165,8 @@ class Clients extends CI_Controller {
         ->add_action('Medical Aid','','','',array($this,'_medicalAid'))
         ->add_action('Nearest Family / Friend','','','',array($this,'_nearestFamilyFriend'))
         ->add_action('Referred By','','','',array($this,'_refferedBy'))
-        ->add_action('Family Details', '', '','',array($this,'_familyDeatils'));
+        ->add_action('Family Details', '', '','',array($this,'_familyDeatils'))
+        ->add_action('Medical History', '', '','',array($this,'_medicalHistory'));
         //render the output
         $this->_renderGroceryCRUDOutput($this->grocery_crud->render());
     }
@@ -427,6 +435,56 @@ class Clients extends CI_Controller {
         ->fields('clinic_ID','name','dob','allergies','blood_group','other')
         //which fields are required to save data in the db
         ->required_fields('name');
+        //pre-populate the clincID field with value selected before  
+        //make the ClientID field invisible to the user
+        //->change_field_type('clinicID','visible');
+        //before inserting the data run this callback function
+        //add callback after insertion
+        //->callback_after_insert(array($this, '_returnToCalendarAfterBooking'))
+        //Add more custom fields to the CRUD UI
+        //->add_action('Add Next of Kin', '', 'demo/action_more','ui-icon-plus')
+        //render the output
+        $this->_renderGroceryCRUDOutput($this->grocery_crud->render());
+    }
+
+    /*
+     *6. kaizenmed/clients/results
+     *  
+     * 
+     */
+    
+    public function results($clinicID){
+        //define parameter for which data you want to get from db
+        $this->grocery_crud->where('clinic_ID',$clinicID)
+        //which table to work with
+        ->set_table('clients_results')
+        //set subject of the list
+        ->set_subject('Medical History');
+        //set the display theme
+        if ($this->grocery_crud->getState() == 'add' OR $this->grocery_crud->getState() == 'edit')
+        {
+            $this->grocery_crud->set_theme('datatables');
+            $this->grocery_crud->field_type('clinic_ID', 'hidden', $clinicID);
+        }
+        else
+        {
+            $this->grocery_crud->set_theme('twitter-bootstrap');
+            $this->grocery_crud->set_relation('clinic_ID','clients','{clinicID}: {name} {surname}');
+        }
+        //which colunms to display in list
+         $this->grocery_crud->columns('clinic_ID','date','illness','diagnosis','doctor','prescription')
+        //display DB colunms as what
+        ->display_as('clinic_ID','Patient')
+        ->display_as('date','Date of Visit(s)')
+        ->display_as('illness','Illness')
+        ->display_as('diagnosis','Dignosis Given')
+        ->display_as('doctor','Doctor seen')
+        ->display_as('prescription','Prescription')
+        //->display_as('officeCode','Office City')
+        //which fields to show in forms
+        ->fields('clinic_ID','date','illness','diagnosis','doctor','prescription')
+        //which fields are required to save data in the db
+        ->required_fields('date','illness','diagnosis','doctor');
         //pre-populate the clincID field with value selected before  
         //make the ClientID field invisible to the user
         //->change_field_type('clinicID','visible');
