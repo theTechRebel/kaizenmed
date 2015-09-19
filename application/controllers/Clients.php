@@ -60,6 +60,34 @@ class Clients extends CI_Controller {
     function _personResponsibleForAccount($pk, $row){
        return base_url('clients/account').'/'.$row->clinicID;
     }
+
+    /*
+     * 2. nearestFamilyFriend
+     */
+    function _nearestFamilyFriend($pk, $row){
+        return base_url('clients/friend').'/'.$row->clinicID; 
+    }
+
+    /*
+     * 3. medicalAid
+     */
+    function _medicalAid($pk, $row){
+       return base_url('clients/medical').'/'.$row->clinicID;  
+    }
+
+    /*
+     * 4. Referred By
+     */
+    function _refferedBy($pk, $row){
+        return base_url('clients/reffered').'/'.$row->clinicID; 
+    }
+
+    /*
+     * 5. Family Details
+     */
+    function _familyDeatils($pk, $row){
+        return base_url('clients/family').'/'.$row->clinicID; 
+    }
 /* END OF PRIVATE FUNCTIONS*/
 
 /* URL END-POINTS that are associated with the /clients/ controller. */
@@ -127,10 +155,10 @@ class Clients extends CI_Controller {
         //Add more custom fields to the CRUD UI
         //->add_action('Add Next of Kin', '', 'demo/action_more','ui-icon-plus')
         ->add_action('Person Responsible for Account','','','',array($this,'_personResponsibleForAccount'))
-        ->add_action('Medical Aid','','','',array($this,'_callBack'))
-        ->add_action('Nearest Family / Friend','','','',array($this,'_callBack'))
-        ->add_action('Referred By','','','',array($this,'_callBack'))
-        ->add_action('Family Details', '', '','',array($this,'_callBack'));
+        ->add_action('Medical Aid','','','',array($this,'_medicalAid'))
+        ->add_action('Nearest Family / Friend','','','',array($this,'_nearestFamilyFriend'))
+        ->add_action('Referred By','','','',array($this,'_refferedBy'))
+        ->add_action('Family Details', '', '','',array($this,'_familyDeatils'));
         //render the output
         $this->_renderGroceryCRUDOutput($this->grocery_crud->render());
     }
@@ -142,7 +170,7 @@ class Clients extends CI_Controller {
      *    via booking modal for selection of clients 
      */
     public function read(){
-        $query ="SELECT * FROM clients WHERE name like '" . $_POST["keyword"] . "%' OR surname like '" . $_POST["keyword"] . "%' ORDER BY id LIMIT 10";
+        $query ="SELECT * FROM clients WHERE name like '" . $_POST["keyword"] . "%' OR surname like '" . $_POST["keyword"] . "%' ORDER BY clinicID LIMIT 10";
         $mydb = $this->db->query($query);
 
         $data = array();
@@ -202,6 +230,203 @@ class Clients extends CI_Controller {
                  'address','work','post')
         //which fields are required to save data in the db
         ->required_fields('title','fname','sname','address');
+        //pre-populate the clincID field with value selected before  
+        //make the ClientID field invisible to the user
+        //->change_field_type('clinicID','visible');
+        //before inserting the data run this callback function
+        //add callback after insertion
+        //->callback_after_insert(array($this, '_returnToCalendarAfterBooking'))
+        //Add more custom fields to the CRUD UI
+        //->add_action('Add Next of Kin', '', 'demo/action_more','ui-icon-plus')
+        //render the output
+        $this->_renderGroceryCRUDOutput($this->grocery_crud->render());
+    }
+
+    /*
+     *4. kaizenmed/clients/friend
+     *  
+     * 
+     */
+    
+    public function friend($clinicID){
+        //define parameter for which data you want to get from db
+        $this->grocery_crud->where('clinic_ID',$clinicID)
+        //which table to work with
+        ->set_table('clients_nearest_family_friend')
+        //set subject of the list
+        ->set_subject('Nearest Family Friend');
+        //set the display theme
+        if ($this->grocery_crud->getState() == 'add' OR $this->grocery_crud->getState() == 'edit')
+        {
+            $this->grocery_crud->set_theme('datatables');
+            $this->grocery_crud->field_type('clinic_ID', 'hidden', $clinicID);
+        }
+        else
+        {
+            $this->grocery_crud->set_theme('twitter-bootstrap');
+            $this->grocery_crud->set_relation('clinic_ID','clients','{clinicID}: {name} {surname}');
+        }
+        //which colunms to display in list
+         $this->grocery_crud->columns('clinic_ID','name','phone','relation')
+        //display DB colunms as what
+        ->display_as('clinic_ID','Related Patient')
+        ->display_as('name','First Name')
+        ->display_as('phone','Phone Number')
+        ->display_as('relation','Relationship')
+        ->display_as('address','Home Address')
+        //->display_as('officeCode','Office City')
+        //which fields to show in forms
+        ->fields('clinic_ID','name','phone','relation','address')
+        //which fields are required to save data in the db
+        ->required_fields('name','phone','relation');
+        //pre-populate the clincID field with value selected before  
+        //make the ClientID field invisible to the user
+        //->change_field_type('clinicID','visible');
+        //before inserting the data run this callback function
+        //add callback after insertion
+        //->callback_after_insert(array($this, '_returnToCalendarAfterBooking'))
+        //Add more custom fields to the CRUD UI
+        //->add_action('Add Next of Kin', '', 'demo/action_more','ui-icon-plus')
+        //render the output
+        $this->_renderGroceryCRUDOutput($this->grocery_crud->render());
+    }
+
+
+    /*
+     *5. kaizenmed/clients/medical
+     *  
+     * 
+     */
+    
+    public function medical($clinicID){
+        //define parameter for which data you want to get from db
+        $this->grocery_crud->where('clinic_ID',$clinicID)
+        //which table to work with
+        ->set_table('clients_medical_aid')
+        //set subject of the list
+        ->set_subject('Medical Aid');
+        //set the display theme
+        if ($this->grocery_crud->getState() == 'add' OR $this->grocery_crud->getState() == 'edit')
+        {
+            $this->grocery_crud->set_theme('datatables');
+            $this->grocery_crud->field_type('clinic_ID', 'hidden', $clinicID);
+        }
+        else
+        {
+            $this->grocery_crud->set_theme('twitter-bootstrap');
+            $this->grocery_crud->set_relation('clinic_ID','clients','{clinicID}: {name} {surname}');
+        }
+        //which colunms to display in list
+         $this->grocery_crud->columns('clinic_ID','name','members_name','number')
+        //display DB colunms as what
+        ->display_as('clinic_ID','Related Patient')
+        ->display_as('name','Name')
+        ->display_as('members_name','Members Name')
+        ->display_as('number','Medical Aid Number')
+        //->display_as('officeCode','Office City')
+        //which fields to show in forms
+        ->fields('clinic_ID','name','members_name','number')
+        //which fields are required to save data in the db
+        ->required_fields('name','members_name','number');
+        //pre-populate the clincID field with value selected before  
+        //make the ClientID field invisible to the user
+        //->change_field_type('clinicID','visible');
+        //before inserting the data run this callback function
+        //add callback after insertion
+        //->callback_after_insert(array($this, '_returnToCalendarAfterBooking'))
+        //Add more custom fields to the CRUD UI
+        //->add_action('Add Next of Kin', '', 'demo/action_more','ui-icon-plus')
+        //render the output
+        $this->_renderGroceryCRUDOutput($this->grocery_crud->render());
+    }
+
+
+    /*
+     *5. kaizenmed/clients/reffered
+     *  
+     * 
+     */
+    
+    public function reffered($clinicID){
+        //define parameter for which data you want to get from db
+        $this->grocery_crud->where('clinic_ID',$clinicID)
+        //which table to work with
+        ->set_table('clients_reffered')
+        //set subject of the list
+        ->set_subject('Referred By');
+        //set the display theme
+        if ($this->grocery_crud->getState() == 'add' OR $this->grocery_crud->getState() == 'edit')
+        {
+            $this->grocery_crud->set_theme('datatables');
+            $this->grocery_crud->field_type('clinic_ID', 'hidden', $clinicID);
+        }
+        else
+        {
+            $this->grocery_crud->set_theme('twitter-bootstrap');
+            $this->grocery_crud->set_relation('clinic_ID','clients','{clinicID}: {name} {surname}');
+        }
+        //which colunms to display in list
+         $this->grocery_crud->columns('clinic_ID','name','address','phone')
+        //display DB colunms as what
+        ->display_as('clinic_ID','Related Patient')
+        ->display_as('name','Name')
+        ->display_as('address','Address')
+        ->display_as('phone','Phone Number')
+        //->display_as('officeCode','Office City')
+        //which fields to show in forms
+        ->fields('clinic_ID','name','address','phone')
+        //which fields are required to save data in the db
+        ->required_fields('name');
+        //pre-populate the clincID field with value selected before  
+        //make the ClientID field invisible to the user
+        //->change_field_type('clinicID','visible');
+        //before inserting the data run this callback function
+        //add callback after insertion
+        //->callback_after_insert(array($this, '_returnToCalendarAfterBooking'))
+        //Add more custom fields to the CRUD UI
+        //->add_action('Add Next of Kin', '', 'demo/action_more','ui-icon-plus')
+        //render the output
+        $this->_renderGroceryCRUDOutput($this->grocery_crud->render());
+    }
+
+    /*
+     *5. kaizenmed/clients/family
+     *  
+     * 
+     */
+    
+    public function family($clinicID){
+        //define parameter for which data you want to get from db
+        $this->grocery_crud->where('clinic_ID',$clinicID)
+        //which table to work with
+        ->set_table('clients_family')
+        //set subject of the list
+        ->set_subject('Family Details');
+        //set the display theme
+        if ($this->grocery_crud->getState() == 'add' OR $this->grocery_crud->getState() == 'edit')
+        {
+            $this->grocery_crud->set_theme('datatables');
+            $this->grocery_crud->field_type('clinic_ID', 'hidden', $clinicID);
+        }
+        else
+        {
+            $this->grocery_crud->set_theme('twitter-bootstrap');
+            $this->grocery_crud->set_relation('clinic_ID','clients','{clinicID}: {name} {surname}');
+        }
+        //which colunms to display in list
+         $this->grocery_crud->columns('clinic_ID','name','dob','allergies','blood_group','other')
+        //display DB colunms as what
+        ->display_as('clinic_ID','Related Patient')
+        ->display_as('name','Name(s)')
+        ->display_as('dob','Date of Birth')
+        ->display_as('allergies','Drug Allergies')
+        ->display_as('blood_group','Blood Group')
+        ->display_as('other','Other')
+        //->display_as('officeCode','Office City')
+        //which fields to show in forms
+        ->fields('clinic_ID','name','dob','allergies','blood_group','other')
+        //which fields are required to save data in the db
+        ->required_fields('name');
         //pre-populate the clincID field with value selected before  
         //make the ClientID field invisible to the user
         //->change_field_type('clinicID','visible');

@@ -78,7 +78,8 @@ class Booking extends CI_Controller {
                 $this->form_validation->set_rules('end', 'Appointment End time', 'required');
 
                 if($this->form_validation->run() == FALSE) {
-                    $mydb = $this->mydb->get_all_where('clients', array('clinicID'=>$this->session->clinicID), 1);
+                    $query ="SELECT * FROM clients WHERE clinicID = '" . $this->session->clinicID . "' LIMIT 1";
+                    $mydb = $this->db->query($query);
                     $client = $mydb->row_array(0);
 
 

@@ -34,10 +34,12 @@ class Calendar extends CI_Controller {
 
     function _generateClinicID($post=null){
         //generate client ID
-        $query = $this->mydb->get_all("clients");
+        $query = $this->mydb->get_all("count");
         $int = $query->row($query->num_rows())->id + 1;
         $post['clinicID'] = "CC".$int;
         $this->session->set_userdata('clinicID',$post['clinicID']);
+        $data = array('id' => $int);
+        $this->mydb->insert('count', $data);
         return $post;
     }
 /* END OF PRIVATE FUNCTIONS*/
