@@ -51,7 +51,7 @@ $(function(){
 });
 
 
-//when an item in dropdow list is clicked do something
+//when an item in dropdown list is clicked do something
 	$(".uk-button-dropdown").on('click','.clickClientName',function(){
 
 			var modal = UIkit.modal("#add-booking");

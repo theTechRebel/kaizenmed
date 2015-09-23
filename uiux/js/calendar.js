@@ -1,8 +1,15 @@
-<!-- load in the fullcalendar js plugin -->
+/*
+ * Implementation of FULLCALENDER.js plugin 
+ * Based on FullCalendar v2.3.2
+ * http://fullcalendar.io/
+ * 
+ */
+
 $(function(){
     // page is now ready, initialize the calendar...
     $('#calendar').fullCalendar({
 
+            //callback when user resizes a booking to change time
             eventResize: function(event, delta, revertFunc) {
                 alert("Appointment "+event.title + " end is now " + event.end.format("YYYY-MM-DD @ HH:mm")+" Hrs");
 
@@ -36,6 +43,7 @@ $(function(){
 
         },
 
+        //callback when user drops a booking on a certain date
         eventDrop: function( event, delta, revertFunc, jsEvent, ui, view ){ 
             alert("Appointment "+event.title + " was dropped on " + event.start.format("YYYY-MM-DD @ HH:mm")+" Hrs");
 
@@ -68,11 +76,13 @@ $(function(){
             }
         },
 
-        eventLimit: true, // for all non-agenda views
+        //enable i limit to the bookings viewable in all non-agenda views
+        eventLimit: true,
 
+        //limit to only show 4 bookings per day for month view 
         views: {
             month: {
-                eventLimit: 4 // adjust to 6 only for agendaWeek/agendaDay
+                eventLimit: 4 
             }
         },
 
@@ -82,14 +92,19 @@ $(function(){
 
         theme: false,
 
+        //URL end point / KaizenMed API to read bookings in JSON format
+        //for display on the calendar
         events: 'http://localhost/kaizen/KaizenMed/booking/read/web/',
 
+        //what to show in the header above the calendar
         header:{
             left:   'prevYear,nextYear',
             center: 'title,today',
             right:  'prev,next,month,agendaWeek,agendaDay'
         },
 
+        //event trigger when a day is clicked on the calendar
+        //moves from month view into agenda view for that particular day
         dayClick: function(date, jsEvent, view){
             //if a user clicks on a day change view to agendaWeek View
             if(view.name == 'month'){
@@ -122,6 +137,8 @@ $(function(){
             }
         },
 
+        //event trigger when a booking is clicked on the calendar
+        //shows a pop-up modal dialog with booking detais
         eventClick: function(booking, jsEvent, view) {
 
             var modal = UIkit.modal("#view-booking");
@@ -139,39 +156,5 @@ $(function(){
             }
 
         },
-
-        /*
-
-        dayClick: function(date, jsEvent, view) {
-
-        alert('Clicked on: ' + date.format());
-
-        alert('Coordinates: ' + jsEvent.pageX + ',' + jsEvent.pageY);
-
-        alert('Current view: ' + view.name);
-
-        // change the day's background color just for fun
-        $(this).css('background-color', 'red');
-
-        },
-
-        eventClick: function(calEvent, jsEvent, view) {
-
-        alert('Event: ' + calEvent.title);
-        alert('Coordinates: ' + jsEvent.pageX + ',' + jsEvent.pageY);
-        alert('View: ' + view.name);
-
-        // change the border color just for fun
-        $(this).css('border-color', 'red');
-
-        },
-
-        eventMouseover: function(calEvent,jsEvent,view){
-            alert('Event ' + calEvent.title);
-            alert('Event ' + calEvent.treatment);
-            alert('Event ' + calEvent.doctor);
-        }
-
-        */
     });
 });

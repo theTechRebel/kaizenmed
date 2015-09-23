@@ -13,7 +13,7 @@ class Clients extends CI_Controller {
 
 	/*
      * 1. _renderGroceryCRUDOutput($output[GroceryCRUD array of .css and .js dependencies])
-     * function that takes in rocery crud output and renders the view to the user.
+     * function that takes in Grocery crud output and renders the view to the user.
      */
     
     function _renderGroceryCRUDOutput($output = null){
@@ -40,64 +40,124 @@ class Clients extends CI_Controller {
         return $post;
     }
 
-    function _addClinicID($post=null){
-        die(var_dump($post));
-    }
 
-    /*
-     * TODO:create callbacks for various things
-     * such as adding Next of Kin and adding medical aid using this function, for now its just a placeholder.
-     */
-
-    function _callBack($primaryKey , $row){
-        return base_url('some_function/some_method').'/'.$row->clinicID;
-    }
-
-    /*
-     * FUNCTIONS MAPPING FROM ADDITIONAL ACTIONS
-     * 1. personResponsibleForAccount
+/* CALLBACKS for GroceryCRUD API */
+    /* 
+    *3. Callbacks for various actions using GroceryCRUD API
+    *
+    * Basically Callbacks are added to each individual
+    * row in the clients table to bring out information 
+    * linked to that particular row from other tables. 
+    * It is pulling out information that is linked to that rows 
+    * Primary Key represented as a Foreign Key in another table.
+    *
+    * Fomart: 
+    *      _callBack($primaryKey [primary key of the selected row] , $row [data from the selected row]){
+    *          return base_url('some_controller/some_method').'/'.$row->clinicID;
+    *          [returning a URL structured with a method from a controller appended with 
+    *           the clincID value from the selected row]
+    *      }
+    * 
+     * 3.1. _personResponsibleForAccount: reffer to CallBack() Fomart in 3.
+     *
+     * Uses GroceryCRUD API to create additional functionality 
+     * to link clients view with Person Responsible for Account View
+     * using Primary Key in clients table linked with clinic_ID in 
+     * clients_account table as foreign Key.
+     * Gives ability to CRUD person responsible for account
+     *
+     * Returns a URL structure .../clients/account/ + clinicID to the 
+     * Person Responsible for Account Action in 
+     * http://localhost/kaizen/KaizenMed/clients view
+     * 
      */
     function _personResponsibleForAccount($pk, $row){
        return base_url('clients/account').'/'.$row->clinicID;
     }
 
     /*
-     * 2. nearestFamilyFriend
+     * 3.2. _nearestFamilyFriend: reffer to CallBack() Fomart in 3.
+     * Uses GroceryCRUD API to create additional functionality 
+     * to link clients view with Nearest Family Friend View
+     * using Primary Key in clients table linked with clinic_ID in 
+     * clients_nearest_family_friend table as foreign Key.
+     * Gives ability to CRUD nearest family friend
+     *
+     * Returns a URL structure .../clients/friend/ + clinicID to the 
+     * Nearest Family Friend Action in 
+     * http://localhost/kaizen/KaizenMed/clients view
      */
     function _nearestFamilyFriend($pk, $row){
         return base_url('clients/friend').'/'.$row->clinicID; 
     }
 
     /*
-     * 3. medicalAid
+     * 3.3. _medicalAid: reffer to CallBack() Fomart in 3.
+     * Uses GroceryCRUD API to create additional functionality 
+     * to link clients view with Medical Aid View
+     * using Primary Key in clients table linked with clinic_ID in 
+     * clients_medical_aid table as foreign Key.
+     * Gives ability to CRUD medical aid
+     *
+     * Returns a URL structure .../clients/medical/ + clinicID to the 
+     * Medical Aid Action in 
+     * http://localhost/kaizen/KaizenMed/clients view
      */
     function _medicalAid($pk, $row){
        return base_url('clients/medical').'/'.$row->clinicID;  
     }
 
     /*
-     * 4. Referred By
+     * 4. _refferedBy: reffer to CallBack() Fomart in 3.
+     * Uses GroceryCRUD API to create additional functionality 
+     * to link clients view with Reffered By View
+     * using Primary Key in clients table linked with clinic_ID in 
+     * clients_reffered table as foreign Key.
+     * Gives ability to CRUD Reffered By
+     *
+     * Returns a URL structure .../clients/reffered/ + clinicID to the 
+     * Reffered By Action in 
+     * http://localhost/kaizen/KaizenMed/clients view
      */
     function _refferedBy($pk, $row){
         return base_url('clients/reffered').'/'.$row->clinicID; 
     }
 
     /*
-     * 5. Family Details
+     * 5. _familyDeatils: reffer to CallBack() Fomart in 3.
+     * Uses GroceryCRUD API to create additional functionality 
+     * to link clients view with Family Details View
+     * using Primary Key in clients table linked with clinic_ID in 
+     * clients_family table as foreign Key.
+     * Gives ability to CRUD Family Details
+     *
+     * Returns a URL structure .../clients/family/ + clinicID to the 
+     * Family Details Action in 
+     * http://localhost/kaizen/KaizenMed/clients view
      */
     function _familyDeatils($pk, $row){
         return base_url('clients/family').'/'.$row->clinicID; 
     }
 
     /*
-     * 6. Results
+     * 6. _medicalHistory: reffer to CallBack() Fomart in 3.
+     * Uses GroceryCRUD API to create additional functionality 
+     * to link clients view with Medical History View
+     * using Primary Key in clients table linked with clinic_ID in 
+     * clients_results table as foreign Key.
+     * Gives ability to CRUD Medical Results
+     *
+     * Returns a URL structure .../clients/results/ + clinicID to the 
+     * Medical History Action in 
+     * http://localhost/kaizen/KaizenMed/clients view
      */
     function _medicalHistory($pk,$row){
         return base_url('clients/results').'/'.$row->clinicID; 
     }
+/* END OF CALLBACKS for GroceryCRUD API */
 /* END OF PRIVATE FUNCTIONS*/
 
-/* URL END-POINTS that are associated with the /clients/ controller. */
+/* PUBLIC FUNCTIONS / URL END-POINTS from /clients/ controller. accessible via http:// */
 
         /**
          * 1. kaizenmed/clients/index/ | kaizenmed/clients/
@@ -195,9 +255,20 @@ class Clients extends CI_Controller {
     }
 
 
+/* ADDITIONAL ACTIONS
+   Linking each row in clients trable with related information in other tables
+   e.g linking client with clinicID CC34 in clients  table to Medical Aid information 
+   on that client stored in clients_medical_aid using clinic_ID as foreign key with CC34
+   as its value. 
+*/
+
     /*
      *3. kaizenmed/clients/account
-     *  
+     *  function for CRUD person responsible for account for each client
+     *  links from clients table using Primary Key of clients table
+     *  used as foreign key in clients_account table
+     *
+     * account(clinicID[the clincID of the row selected from the clients table])
      * 
      */
     
@@ -208,7 +279,7 @@ class Clients extends CI_Controller {
         ->set_table('clients_account')
         //set subject of the list
         ->set_subject('Person Responsible for Account');
-        //set the display theme
+        //set the display theme depending on wether we are adding or editing
         if ($this->grocery_crud->getState() == 'add' OR $this->grocery_crud->getState() == 'edit')
         {
             $this->grocery_crud->set_theme('datatables');
@@ -238,22 +309,17 @@ class Clients extends CI_Controller {
                  'address','work','post')
         //which fields are required to save data in the db
         ->required_fields('title','fname','sname','address');
-        //pre-populate the clincID field with value selected before  
-        //make the ClientID field invisible to the user
-        //->change_field_type('clinicID','visible');
-        //before inserting the data run this callback function
-        //add callback after insertion
-        //->callback_after_insert(array($this, '_returnToCalendarAfterBooking'))
-        //Add more custom fields to the CRUD UI
-        //->add_action('Add Next of Kin', '', 'demo/action_more','ui-icon-plus')
         //render the output
         $this->_renderGroceryCRUDOutput($this->grocery_crud->render());
     }
 
     /*
      *4. kaizenmed/clients/friend
-     *  
-     * 
+     *  function for CRUD nearest family friend for each client
+     *  links from clients table using Primary Key of clients table
+     *  used as foreign key in clients_nearest_family_friend table
+     *
+     * friend(clinicID[the clincID of the row selected from the clients table])
      */
     
     public function friend($clinicID){
@@ -287,14 +353,6 @@ class Clients extends CI_Controller {
         ->fields('clinic_ID','name','phone','relation','address')
         //which fields are required to save data in the db
         ->required_fields('name','phone','relation');
-        //pre-populate the clincID field with value selected before  
-        //make the ClientID field invisible to the user
-        //->change_field_type('clinicID','visible');
-        //before inserting the data run this callback function
-        //add callback after insertion
-        //->callback_after_insert(array($this, '_returnToCalendarAfterBooking'))
-        //Add more custom fields to the CRUD UI
-        //->add_action('Add Next of Kin', '', 'demo/action_more','ui-icon-plus')
         //render the output
         $this->_renderGroceryCRUDOutput($this->grocery_crud->render());
     }
@@ -302,8 +360,11 @@ class Clients extends CI_Controller {
 
     /*
      *5. kaizenmed/clients/medical
-     *  
-     * 
+     *  function for CRUD Medical Aid for each client
+     *  links from clients table using Primary Key of clients table
+     *  used as foreign key in clients_medical_aid table
+     *
+     * medical(clinicID[the clincID of the row selected from the clients table])
      */
     
     public function medical($clinicID){
@@ -336,14 +397,6 @@ class Clients extends CI_Controller {
         ->fields('clinic_ID','name','members_name','number')
         //which fields are required to save data in the db
         ->required_fields('name','members_name','number');
-        //pre-populate the clincID field with value selected before  
-        //make the ClientID field invisible to the user
-        //->change_field_type('clinicID','visible');
-        //before inserting the data run this callback function
-        //add callback after insertion
-        //->callback_after_insert(array($this, '_returnToCalendarAfterBooking'))
-        //Add more custom fields to the CRUD UI
-        //->add_action('Add Next of Kin', '', 'demo/action_more','ui-icon-plus')
         //render the output
         $this->_renderGroceryCRUDOutput($this->grocery_crud->render());
     }
@@ -351,8 +404,11 @@ class Clients extends CI_Controller {
 
     /*
      *5. kaizenmed/clients/reffered
-     *  
-     * 
+     *  function for CRUD Reffered By for each client
+     *  links from clients table using Primary Key of clients table
+     *  used as foreign key in clients_reffered table
+     *
+     * reffered(clinicID[the clincID of the row selected from the clients table])
      */
     
     public function reffered($clinicID){
@@ -385,22 +441,17 @@ class Clients extends CI_Controller {
         ->fields('clinic_ID','name','address','phone')
         //which fields are required to save data in the db
         ->required_fields('name');
-        //pre-populate the clincID field with value selected before  
-        //make the ClientID field invisible to the user
-        //->change_field_type('clinicID','visible');
-        //before inserting the data run this callback function
-        //add callback after insertion
-        //->callback_after_insert(array($this, '_returnToCalendarAfterBooking'))
-        //Add more custom fields to the CRUD UI
-        //->add_action('Add Next of Kin', '', 'demo/action_more','ui-icon-plus')
         //render the output
         $this->_renderGroceryCRUDOutput($this->grocery_crud->render());
     }
 
     /*
      *5. kaizenmed/clients/family
-     *  
-     * 
+     *  function for CRUD Family Details for each client
+     *  links from clients table using Primary Key of clients table
+     *  used as foreign key in clients_family table
+     *
+     * family(clinicID[the clincID of the row selected from the clients table])
      */
     
     public function family($clinicID){
@@ -435,22 +486,17 @@ class Clients extends CI_Controller {
         ->fields('clinic_ID','name','dob','allergies','blood_group','other')
         //which fields are required to save data in the db
         ->required_fields('name');
-        //pre-populate the clincID field with value selected before  
-        //make the ClientID field invisible to the user
-        //->change_field_type('clinicID','visible');
-        //before inserting the data run this callback function
-        //add callback after insertion
-        //->callback_after_insert(array($this, '_returnToCalendarAfterBooking'))
-        //Add more custom fields to the CRUD UI
-        //->add_action('Add Next of Kin', '', 'demo/action_more','ui-icon-plus')
         //render the output
         $this->_renderGroceryCRUDOutput($this->grocery_crud->render());
     }
 
     /*
      *6. kaizenmed/clients/results
-     *  
-     * 
+     *  function for CRUD Medical Results for each client
+     *  links from clients table using Primary Key of clients table
+     *  used as foreign key in clients_results table
+     *
+     * results(clinicID[the clincID of the row selected from the clients table])
      */
     
     public function results($clinicID){
@@ -485,17 +531,11 @@ class Clients extends CI_Controller {
         ->fields('clinic_ID','date','illness','diagnosis','doctor','prescription')
         //which fields are required to save data in the db
         ->required_fields('date','illness','diagnosis','doctor');
-        //pre-populate the clincID field with value selected before  
-        //make the ClientID field invisible to the user
-        //->change_field_type('clinicID','visible');
-        //before inserting the data run this callback function
-        //add callback after insertion
-        //->callback_after_insert(array($this, '_returnToCalendarAfterBooking'))
-        //Add more custom fields to the CRUD UI
-        //->add_action('Add Next of Kin', '', 'demo/action_more','ui-icon-plus')
         //render the output
         $this->_renderGroceryCRUDOutput($this->grocery_crud->render());
     }
+/* END OF ADDITIONAL ACTIONS */
+/* END OF PUBLIC FUNCTIONS */
 }
 
 /* End of file Clients.php */
