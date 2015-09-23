@@ -11,7 +11,7 @@
         -->
 
         <div class="uk-panel">
-            <p>Engineered with &heartsuit; by <a href="http://www.afrikaizen.co.zw">AfriKaizen Inc.</a></p>
+            <p>Engineered with &heartsuit; by <a href="http://www.afrikaizen.com/">AfriKaizen Inc.</a></p>
         </div>
 
     </div>
