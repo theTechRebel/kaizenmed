@@ -20,7 +20,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 |   http://localhost/kaizen/KaizenMed/
 |
 |   Production Environment
-|   http://
+|   http://afrikaizen.com/kaizenmed/
 |
 */
 $config['base_url'] = 'http://localhost/kaizen/KaizenMed/';
