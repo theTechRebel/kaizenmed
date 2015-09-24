@@ -7,7 +7,7 @@ RELEASE NOTES:
 Minor changes
 Experienced issues after deploying to live environment
 
-CHANGES;
+CHANGES:
 =
 1. ./application/controllers/Clients.php
 		Fixed refferences to views namely Clients/clients.php.
@@ -36,6 +36,8 @@ CHANGES;
 4. ./application/models/
 	renamed grocery_crud_model.php to Grocery_crud_model.php because on live environment
 	models refferenced with a lowercase first letter cannot be accessed / found.
+
+	All of these in commit: 31341e7b729fe34aff1b6134ef6dd5991befbdda
 
 THOUGHTS:
 Live environments are a HEADACHE!!!
