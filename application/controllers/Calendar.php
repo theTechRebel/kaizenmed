@@ -20,7 +20,7 @@ class Calendar extends CI_Controller {
     
     function _renderGroceryCRUDOutput($output = null){
         $this->load->view('Require/grocery-crud-header.php',$output);
-        $this->load->view('calendar/clients.php',$output);
+        $this->load->view('Calendar/clients.php',$output);
     }
 
     /*

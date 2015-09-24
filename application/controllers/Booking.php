@@ -108,7 +108,12 @@ class Booking extends CI_Controller {
                                   'date'        => $dateAndTime['date']);
 
                     $this->mydb->insert('bookings',$data);
-                    redirect('calendar');
+                    //changed to use header() because on apache live environment 
+                    //was getting php headers already sent error
+                    //probably because redirect() function in CI returns 
+                    //some sort of information before redirecting which messes up
+                    //stuff especially when you are working with JS.
+                    header("Location:".base_url("calendar/"));
                 }
                 break;
 

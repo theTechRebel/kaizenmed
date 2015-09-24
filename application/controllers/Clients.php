@@ -18,7 +18,7 @@ class Clients extends CI_Controller {
     
     function _renderGroceryCRUDOutput($output = null){
         $this->load->view('Require/grocery-crud-header.php',$output);
-        $this->load->view('clients/clients.php',$output);
+        $this->load->view('Clients/clients.php',$output);
     }
 
 

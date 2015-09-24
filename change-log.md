@@ -1,3 +1,49 @@
+24 September 2015
+=
+	KaizenMed V 1.1.2
+
+RELEASE NOTES:
+=
+Minor changes
+Experienced issues after deploying to live environment
+
+CHANGES;
+=
+1. ./application/controllers/Clients.php
+		Fixed refferences to views namely Clients/clients.php.
+		On dev environment refferencing views folder in lower case had no issues
+		but on server environment refferencing uppercased "Clients" view folder with 
+		a lower case "clients" resulted in a file not found exception.
+		Note to self: Uppercase folders should always be refferenced in uppercase in both
+		dev environment and server/ production environment.
+
+2. ./application/controllers/Calendar.php
+		Fixed refferences to views namely Clients/clients.php.
+		On dev environment refferencing views folder in lower case had no issues
+		but on server environment refferencing uppercased "Clients" view folder with 
+		a lower case "clients" resulted in a file not found exception.
+		Note to self: Uppercase folders should always be refferenced in uppercase in both
+		dev environment and server/ production environment.	
+
+3. ./application/controllers/Booking.php
+	Adjusted public function create(){...}
+	changed to use header() because on apache live environment 
+ was getting php headers already sent error
+ probably because redirect() function in CI returns 
+ some sort of information before redirecting which messes up
+ stuff especially when you are working with JS.
+
+4. ./application/models/
+	renamed grocery_crud_model.php to Grocery_crud_model.php because on live environment
+	models refferenced with a lowercase first letter cannot be accessed / found.
+
+THOUGHTS:
+Live environments are a HEADACHE!!!
+
+@theTechRebel
+
+-------------------------------------------------------------------------------------------------------
+
 23 September 2015
 =
 	KaizenMed V 1.1.1
